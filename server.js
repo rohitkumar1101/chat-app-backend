@@ -3,7 +3,7 @@ const http = require('http');
 const socketIo = require('socket.io');
 
 const app = express();
-
+const server = http.createServer(app);
 const io = new socketIo.Server({
     cors: {
         origin: '*'
@@ -31,5 +31,9 @@ io.on('connection', (socket) => {
 });
 
 io.listen(3001, () => {
+    console.log('Socket is running on port 3001');
+});
+
+server.listen(3001, () => {
     console.log('Server is running on port 3001');
 });
