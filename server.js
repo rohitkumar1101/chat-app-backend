@@ -1,22 +1,23 @@
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
+const cors = require('cors');
 
 const app = express();
 const server = http.createServer(app);
+
 const io = new socketIo.Server({
     cors: {
         origin: '*'
     }
 });
 
-// new socket.Server(this.httpServer, {
-//     cors: {
-//         origin: '*'
-//     },
-//     pingInterval: 5000,
-//     pingTimeout: 20000
-// })
+const chatgptRoutes = require('./routes')
+
+app.use(cors({ origin: true, credentials: true }));
+app.use(express.json({ limit: '50mb' }));
+app.use('/api/chatgpt', chatgptRoutes);
+
 
 io.on('connection', (socket) => {
     console.log('A user connected');
@@ -30,8 +31,8 @@ io.on('connection', (socket) => {
     });
 });
 
-io.listen(3001, () => {
-    console.log('Socket is running on port 3001');
+io.listen(4001, () => {
+    console.log('Socket is running on port 4001');
 });
 
 server.listen(3001, () => {
